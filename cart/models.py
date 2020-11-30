@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from django.shortcuts import reverse
 # Create your models here.
 
 User = get_user_model()
@@ -31,6 +32,7 @@ class Address(models.Model):
 class Product(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField()
+    image = models.ImageField(upload_to='product_images', null=True, blank=True)
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -39,10 +41,13 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("cart:product-detail", kwargs={'slug': self.slug})
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey('Order',
-                              related_name='item',
+                              related_name='items',
                               on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
@@ -52,7 +57,7 @@ class OrderItem(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(blank=True, null=True)
     ordered = models.BooleanField(default=False)
