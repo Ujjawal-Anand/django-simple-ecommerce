@@ -22,12 +22,14 @@ class ProductDetailView(generic.FormView):
 
     def get_success_url(self):
         return reverse("home")  # TODO: cart
-    
+
     def form_valid(self, form):
         order = get_or_set_order_session(self.request)
         product = self.get_object()
 
-        item_filter = order.items.filter(product=product)
+        item_filter = order.items.filter(product=product,
+                                         color=form.cleaned_data.get('color'),
+                                         size=form.cleaned_data.get('size'))
 
         if item_filter.exists():
             item = item_filter.first()
@@ -48,4 +50,10 @@ class ProductDetailView(generic.FormView):
         return context
 
 
-    
+class CartView(generic.TemplateView):
+    template_name = "cart/cart.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CartView, self).get_context_data(**kwargs)
+        context["order"] = get_or_set_order_session(self.request)
+        return context
