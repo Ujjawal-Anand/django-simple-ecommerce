@@ -62,6 +62,14 @@ class CartView(generic.TemplateView):
 class IncreaseQuantityView(generic.View):
     def get(self, request, *args, **kwargs):
         order_item = get_object_or_404(OrderItem, id=kwargs['pk'])
+        order_item.quantity += 1
+        order_item.save()
+        return redirect("cart:summary")
+
+
+class DecreaseQuantityView(generic.View):
+    def get(self, request, *args, **kwargs):
+        order_item = get_object_or_404(OrderItem, id=kwargs['pk'])
         if order_item.quantity <= 1:
             order_item.delete()
         else:

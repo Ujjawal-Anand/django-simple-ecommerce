@@ -36,7 +36,7 @@ class ColorVariation(models.Model):
         return self.name
 
 
-def SizeVariation(models.Model):
+class SizeVariation(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -48,7 +48,7 @@ class Product(models.Model):
     slug = models.SlugField()
     image = models.ImageField(upload_to='product_images', null=True, blank=True)
     description = models.TextField()
-    price =  models.IntegerField(default=0)
+    price = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=False)
@@ -61,7 +61,7 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("cart:product-detail", kwargs={'slug': self.slug})
 
-    def get_price(models.Model):
+    def get_price(self):
         return "{:.2f}".format(self.price / 100)
 
 
@@ -72,7 +72,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     color = models.ForeignKey(ColorVariation, blank=True, null=True, on_delete=models.SET_NULL)
-    size = models.ForeignKey(SizeVariation, blank=True, null=True, on_deletemodels.SET_NULL)
+    size = models.ForeignKey(SizeVariation, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.quantity} x {self.product.title}"
