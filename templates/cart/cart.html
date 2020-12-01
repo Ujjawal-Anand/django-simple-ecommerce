@@ -40,7 +40,7 @@
                                     <small>Size: {{ item.size.name }}</small>
                                     <small>Color: {{ item.color.name }}</small>
                                 </td>
-                                <td>$0</td>
+                                <td>${{ item.product.get_price }}</td>
                                 <td>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -57,7 +57,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    $0
+                                    ${{ item.get_total_item_price }}
                                 </td>
                                 <td>
                                     <a href="#" class="btn btn-primary btn-sm">X</a>
