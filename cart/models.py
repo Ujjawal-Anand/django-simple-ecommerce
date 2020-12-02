@@ -106,7 +106,7 @@ class Order(models.Model):
         return f"ORDER-{self.pk}"
 
     def get_raw_subtotal(self):
-        totla = 0
+        total = 0
         for order_item in self.items.all():
             total += order_item.get_raw_total_item_price()
         return total
@@ -122,7 +122,7 @@ class Order(models.Model):
         return subtotal
 
     def get_total(self):
-        total = slef.get_raw_total()
+        total = self.get_raw_total()
         return "{:.2f}".format(total / 100)
 
 
