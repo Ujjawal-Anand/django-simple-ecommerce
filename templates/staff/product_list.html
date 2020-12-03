@@ -6,40 +6,38 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <h2 class="text-black">Staff Portal</h2>
+                <h2 class="text-black">Staff Portal - Products</h2>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">
-                            {{ request.user.email }}
-                        </h5>
-                        <hr />
-                        <a href="{% url 'staff:product-list' %}">Products</a>
-                        <hr />
-
-                        <h5 class="card-title">Recent orders</h5>
                         <div class="site-blocks-table">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Reference No.</th>
-                                        <th>Date</th>
-                                        <th>User</th>
-                                        <th>Amount</th>
-                                        <th>Payment Status</th>
+                                        <th>Title.</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for order in orders %}
+                                    {% for product in products %}
                                     <tr>
-                                        <td><a href="{% url 'cart:order-detail' order.pk %}">#{{ order.reference_number }}</a></td>
-                                        <td>{{ order.ordered_date }}</td>
-                                        <td>{{ order.user.email }}</td>
-                                        <td>${{ order.get_total }}</td>
-                                        <td>{% if order.ordered %}Paid{% else %}Not paid{% endif %}</td>
+                                        <td>{{ product.title }}</td>
+                                        <td>${{ product.get_price }}</td>
+                                        <td>
+                                            <a href="{{ product.get_update_url }}">Update</a>
+                                            <a tabindex="0" class="btn btn-sm btn-primary" role='button'
+                                                data-html='true' data-toggle='popover' data-trigger='focus'
+                                                title='Are you sure you want to delete this product?'
+                                                data-content="<a href='{{ product.get_delete_url }}'>Confirm</a>">
+                                                X
+                                            </a>
+                                            
+
+                                        </td>
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="4">You haven't made any orders</td>
+                                        <td colspan="3">You don't have any products</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -87,4 +85,12 @@
     </div>
 </div>
 
-{% endblock content %} 
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(function () {
+        $("[data-toggle=popover]").popover();
+    });
+</script>
+{% endblock scripts %}
