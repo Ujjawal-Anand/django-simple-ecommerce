@@ -31,6 +31,7 @@ class ProductListView(generic.ListView):
         })
         return context
 
+
 class ProductDetailView(generic.FormView):
     template_name = 'cart/product_detail.html'
     form_class = AddToCartForm
@@ -103,7 +104,7 @@ class RemoveFromCartView(generic.View):
         return redirect("cart:summary")
 
 
-class CheckoutView(generic.FormView):
+class CheckoutView(LoginRequiredMixin, generic.FormView):
     template_name = 'cart/checkout.html'
     form_class = AddressForm
 
@@ -160,7 +161,7 @@ class CheckoutView(generic.FormView):
         return context
 
 
-class PaymentView(generic.TemplateView):
+class PaymentView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'cart/payment.html'
 
     def get_context_data(self, **kwargs):
