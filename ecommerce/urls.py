@@ -11,7 +11,8 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('contact/', views.ContactFormView.as_view(), name='contact'),
     path('cart/', include('cart.urls', namespace='cart')),
-    path('profile', views.ProfileView.as_view(), name='profile')
+    path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('staff/', include('staff.urls', namespace='staff')),
 ]
 
 if settings.DEBUG:
