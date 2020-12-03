@@ -7,6 +7,7 @@ from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('', views.HomeView.as_view(), name='home'),
     path('contact/', views.ContactFormView.as_view(), name='contact'),
     path('cart/', include('cart.urls', namespace='cart')),

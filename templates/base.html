@@ -59,7 +59,7 @@
                             <ul>
                                 <li>
                                     {% if request.user.is_authenticated %}
-                                        <a href="/"><span><i class="fas fa-user"></i></span></a>
+                                        <a href="{% url 'profile' %}"><span><i class="fas fa-user"></i></span></a>
                                     {% else %}
                                         <a href="/"><span><i
                                                 class="fas fa-sign-in-alt"></i></span></a>
