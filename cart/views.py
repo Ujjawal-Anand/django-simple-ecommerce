@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Product, OrderItem, Address, Payment, Order
+from .models import Product, OrderItem, Address, Payment, Order, Category
 from .forms import AddToCartForm, AddressForm
 from .utils import get_or_set_order_session
 
@@ -15,8 +15,21 @@ from .utils import get_or_set_order_session
 
 class ProductListView(generic.ListView):
     template_name = 'cart/product_list.html'
-    queryset = Product.objects.all()
+    
+    def get_queryset(self):
+        qs = Product.objects.all()
+        category = self.request.GET.get('category', None)
+        if category:
+            qs = qs.filter(Q(primary_category__name=category) |
+                           Q(secondary_categories__name=category)).distinct()
+        return qs
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductListView, self).get_context_data(**kwargs)
+        context.update({
+            "categories": Category.objects.values("name")
+        })
+        return context
 
 class ProductDetailView(generic.FormView):
     template_name = 'cart/product_detail.html'
